@@ -1,0 +1,81 @@
+from asyncio.windows_events import NULL
+from PyQt5 import QtWidgets, QtGui, QtCore
+from parameters import parametric_airfoil
+from Ui import Ui_mainWindow
+from matplotlib.figure import *
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+import matplotlib.pyplot as plt
+import sys, Ui
+
+
+class myMainWindow(QtWidgets.QMainWindow):
+    def __init__(self):
+        super().__init__()  # in python3, super(Class, self).xxx = super().xxx
+        self.ui = Ui_mainWindow()
+        self.ui.setupUi(self)
+        self.velocity = 0
+        self.angle_of_attack = 0
+        self.numbers_of_panel = 0
+        self.filePath = ""
+        self.init()
+
+    def init(self):
+        self.ui.Message_Label.setText(" Message ")
+        self.ui.Angle_Input.setText("0")
+        self.ui.Panels_Input.setText("0")
+        self.ui.Velocity_Input.setText("0")
+        self.setup_control()
+
+    def setup_control(self):
+        self.ui.Load.clicked.connect(self.file_load)
+        self.ui.PLOT.clicked.connect(self.plot)
+        self.ui.Velocity_Ok.clicked.connect(self.velocity_onButtonClick)
+        self.ui.Angle_Ok.clicked.connect(self.angle_of_attack_onButtonClick)
+        self.ui.Panels_Ok.clicked.connect(self.numbers_of_panel_onButtonClick)
+
+    # def plot_airfoil(self):
+
+    def file_load(self):
+        self.filePath, filterType = QtWidgets.QFileDialog.getOpenFileName(
+            self, "Open file", "./"
+        )  # 選擇檔案對話視窗
+        print(self.filePath)
+
+    def plot(self):
+        if self.filePath == "" or self.numbers_of_panel == 0:
+            self.ui.Message_Label.setText("Input numbers of panel or loading file ")
+        else:
+            dx, dy = parametric_airfoil(self.filePath, self.numbers_of_panel)
+            plt.cla()
+            fig = plt.figure(figsize=(5, 2))
+            ax = fig.add_axes([0.15, 0.25, 0.7, 0.7])
+            ax.set_xlim([-0.1, 1.1])
+
+            ax.set_xlabel("x/c")
+            ax.plot(dx, dy, "o--")
+
+            cavans = FigureCanvas(fig)
+            graphicscene = QtWidgets.QGraphicsScene()
+            graphicscene.addWidget(cavans)
+            self.ui.graphicsView.setScene(graphicscene)
+            self.ui.graphicsView.show()
+            # print( self.ui.graphicsView.size())
+
+    def velocity_onButtonClick(self):
+        velocity = float(self.ui.Velocity_Input.text())
+        self.velocity = velocity
+
+    def angle_of_attack_onButtonClick(self):
+        angle_of_attack = float(self.ui.Angle_Input.text())
+        self.angle_of_attack = angle_of_attack
+
+    def numbers_of_panel_onButtonClick(self):
+        numbers_of_panel = float(self.ui.Panels_Input.text())
+        self.numbers_of_panel = numbers_of_panel
+
+
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    window = myMainWindow()
+    window.show()
+    sys.exit(app.exec_())

@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>46c1085c-8557-493e-8b4a-b7807d602ea5</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>src\Ui.py</StartupFile>
+    <StartupFile>src\main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -24,6 +24,8 @@
     <Folder Include="src\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\parameters.py" />
+    <Compile Include="src\main.py" />
     <Compile Include="src\Ui.py" />
   </ItemGroup>
   <ItemGroup>

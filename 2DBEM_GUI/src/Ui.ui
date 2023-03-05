@@ -229,6 +229,19 @@
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="PLOT">
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>PLOT</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="Calculation">
        <property name="font">
         <font>
@@ -365,7 +378,7 @@
      <x>0</x>
      <y>0</y>
      <width>543</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
