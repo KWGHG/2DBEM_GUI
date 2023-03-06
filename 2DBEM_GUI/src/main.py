@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from ast import Str
 from asyncio.windows_events import NULL
 from PyQt5 import QtWidgets, QtGui, QtCore
@@ -11,6 +12,7 @@ import numpy as np
 import sys, Ui
 from Subui import Ui_subWindow
 
+
 class myMainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()  # in python3, super(Class, self).xxx = super().xxx
@@ -21,7 +23,7 @@ class myMainWindow(QtWidgets.QMainWindow):
         self.numbers_of_panel = 0
         self.CL = 0
         self.CP = NULL
-        self.geometry = NULL
+        self.geometry = np.zeros(0)
         self.filePath = ""
         self.init()
 
@@ -40,6 +42,8 @@ class myMainWindow(QtWidgets.QMainWindow):
         self.ui.Panels_Ok.clicked.connect(self.numbers_of_panel_onButtonClick)
         self.ui.Calculation.clicked.connect(self.calculation)
         self.ui.CP_Contour_Plot.clicked.connect(self.CP_plot)
+        self.ui.Download.clicked.connect(self.download_Cp)
+
     # def plot_airfoil(self):
 
     def file_load(self):
@@ -60,7 +64,7 @@ class myMainWindow(QtWidgets.QMainWindow):
             ax.set_xlim([-0.1, 1.1])
 
             ax.set_xlabel("x/c")
-            ax.plot(self.geometry[:,0], self.geometry[:,1], "o--")
+            ax.plot(self.geometry[:, 0], self.geometry[:, 1], "o--")
 
             cavans = FigureCanvas(fig)
             graphicscene = QtWidgets.QGraphicsScene()
@@ -82,26 +86,41 @@ class myMainWindow(QtWidgets.QMainWindow):
         self.numbers_of_panel = numbers_of_panel
 
     def calculation(self):
-        if len(self.geometry) == 0 :
-            self.ui.Message_Label.setText("Please input airfoil file ")
+        if self.geometry.size == 0:
+            self.ui.Message_Label.setText("Please input file ")
         else:
-            self.CL ,self.CP = BEM(self.velocity ,self.angle_of_attack ,self.geometry )
-            self.ui.CL_Label.setText(str(self.CL))
+            self.CL, self.CP = BEM(self.velocity, self.angle_of_attack, self.geometry)
+            self.ui.CL_Label.setText(str(round(self.CL, 3)))
 
     def CP_plot(self):
-        self.subui = Ui_subWindow()
-        plt.cla()
-        fig = plt.figure(figsize=(5, 2))
-        ax = fig.add_axes([0.15, 0.25, 0.7, 0.7])
-        ax.set_xlim([-0.1, 1.1])
+        if self.CL == 0:
+            self.ui.Message_Label.setText("Please input file ")
+        else:
+            self.subui = Ui_subWindow()
+            plt.cla()
+            fig = plt.figure(figsize=(9, 2.5))
+            ax = fig.add_axes([0.15, 0.25, 0.7, 0.7])
+            ax.set_xlim([-0.1, 1.1])
 
-        ax.set_xlabel("x/c")
-        ax.plot(self.CP[:,0], self.CP[:,1], "o--")
-        cavans = FigureCanvas(fig)
-        graphicscene = QtWidgets.QGraphicsScene()
-        graphicscene.addWidget(cavans)
-        self.subui.graphicsView.setScene(graphicscene)
-        self.subui.graphicsView.show()
+            ax.set_xlabel("x/c")
+            ax.plot(self.CP[:, 0], self.CP[:, 1], "o--")
+            cavans = FigureCanvas(fig)
+            graphicscene = QtWidgets.QGraphicsScene()
+            graphicscene.addWidget(cavans)
+            self.subui.graphicsView.setScene(graphicscene)
+            # self.subui.show()
+            self.subui.graphicsView.show()
+
+    def download_Cp(self):
+        if self.CL == 0:
+            self.ui.Message_Label.setText("Please input file ")
+        else:
+            file = open("cp.dat", "w")
+            rows, columns = self.CP.shape
+            for i in range(rows):
+                str1 = str(self.CP[i, 0]) + "\t" + str(self.CP[i, 1]) + "\n"
+                file.write(str1)
+            file.close()
 
 
 if __name__ == "__main__":

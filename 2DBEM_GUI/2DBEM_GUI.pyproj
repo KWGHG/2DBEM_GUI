@@ -11,6 +11,7 @@
     <OutputPath>.</OutputPath>
     <Name>2DBEM_GUI</Name>
     <RootNamespace>2DBEM_GUI</RootNamespace>
+    <SuppressConfigureTestFrameworkPrompt>true</SuppressConfigureTestFrameworkPrompt>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
