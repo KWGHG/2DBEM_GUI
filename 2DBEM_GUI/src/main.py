@@ -9,7 +9,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
 import numpy as np
 import sys, Ui
-
+from Subui import Ui_subWindow
 
 class myMainWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -20,6 +20,7 @@ class myMainWindow(QtWidgets.QMainWindow):
         self.angle_of_attack = 0
         self.numbers_of_panel = 0
         self.CL = 0
+        self.CP = NULL
         self.geometry = NULL
         self.filePath = ""
         self.init()
@@ -33,12 +34,12 @@ class myMainWindow(QtWidgets.QMainWindow):
 
     def setup_control(self):
         self.ui.Load.clicked.connect(self.file_load)
-        self.ui.PLOT.clicked.connect(self.plot)
+        self.ui.PLOT.clicked.connect(self.airfoil_plot)
         self.ui.Velocity_Ok.clicked.connect(self.velocity_onButtonClick)
         self.ui.Angle_Ok.clicked.connect(self.angle_of_attack_onButtonClick)
         self.ui.Panels_Ok.clicked.connect(self.numbers_of_panel_onButtonClick)
         self.ui.Calculation.clicked.connect(self.calculation)
-
+        self.ui.CP_Contour_Plot.clicked.connect(self.CP_plot)
     # def plot_airfoil(self):
 
     def file_load(self):
@@ -47,7 +48,7 @@ class myMainWindow(QtWidgets.QMainWindow):
         )  # 選擇檔案對話視窗
         print(self.filePath)
 
-    def plot(self):
+    def airfoil_plot(self):
         if self.filePath == "" or self.numbers_of_panel == 0:
             self.ui.Message_Label.setText("Input numbers of panel or loading file ")
         else:
@@ -84,8 +85,23 @@ class myMainWindow(QtWidgets.QMainWindow):
         if len(self.geometry) == 0 :
             self.ui.Message_Label.setText("Please input airfoil file ")
         else:
-            self.CL = BEM(self.velocity ,self.angle_of_attack ,self.geometry )
+            self.CL ,self.CP = BEM(self.velocity ,self.angle_of_attack ,self.geometry )
             self.ui.CL_Label.setText(str(self.CL))
+
+    def CP_plot(self):
+        self.subui = Ui_subWindow()
+        plt.cla()
+        fig = plt.figure(figsize=(5, 2))
+        ax = fig.add_axes([0.15, 0.25, 0.7, 0.7])
+        ax.set_xlim([-0.1, 1.1])
+
+        ax.set_xlabel("x/c")
+        ax.plot(self.CP[:,0], self.CP[:,1], "o--")
+        cavans = FigureCanvas(fig)
+        graphicscene = QtWidgets.QGraphicsScene()
+        graphicscene.addWidget(cavans)
+        self.subui.graphicsView.setScene(graphicscene)
+        self.subui.graphicsView.show()
 
 
 if __name__ == "__main__":

@@ -90,10 +90,11 @@ def BEM(inletvelocity ,inletangle ,geometry):
             Force[1] += CP[i+1, 1] * panel_length[i + 1] * -math.cos(theta[i+1])
     
 
-    #for i in range(geometry.shape[0]-2):
-	   # CP[i, 1] = -CP[i, 1]
+    for i in range(geometry.shape[0]-2):
+        CP[i, 1] = -CP[i, 1]
+
     CL = -Force[0] * math.sin(inletangle * math.pi / 180) + Force[1] * math.cos(inletangle * math.pi / 180)
-    return CL
+    return CL ,CP
 
 def strengh_of_doublet(xi ,yi ,xj1 ,yj1 ,xj2 ,yj2 ,index):
     theta = math.atan2(yj2 - yj1, xj2 - xj1)
