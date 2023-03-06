@@ -46,4 +46,4 @@ def parametric_airfoil(filename, numbers_of_panel):
     new_data = list(zip(new_dataX, new_dataY))
     #for line in new_data:
     #    print(" ".join(map(str, line)))
-    return new_dataX, new_dataY
+    return new_data

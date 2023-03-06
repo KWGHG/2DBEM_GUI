@@ -24,8 +24,10 @@
     <Folder Include="src\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\CT2D.py" />
     <Compile Include="src\parameters.py" />
     <Compile Include="src\main.py" />
+    <Compile Include="src\potentialbase_panel_method.py" />
     <Compile Include="src\Ui.py" />
   </ItemGroup>
   <ItemGroup>

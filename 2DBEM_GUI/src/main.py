@@ -1,10 +1,13 @@
+from ast import Str
 from asyncio.windows_events import NULL
 from PyQt5 import QtWidgets, QtGui, QtCore
 from parameters import parametric_airfoil
+from potentialbase_panel_method import BEM
 from Ui import Ui_mainWindow
 from matplotlib.figure import *
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
+import numpy as np
 import sys, Ui
 
 
@@ -16,6 +19,8 @@ class myMainWindow(QtWidgets.QMainWindow):
         self.velocity = 0
         self.angle_of_attack = 0
         self.numbers_of_panel = 0
+        self.CL = 0
+        self.geometry = NULL
         self.filePath = ""
         self.init()
 
@@ -32,6 +37,7 @@ class myMainWindow(QtWidgets.QMainWindow):
         self.ui.Velocity_Ok.clicked.connect(self.velocity_onButtonClick)
         self.ui.Angle_Ok.clicked.connect(self.angle_of_attack_onButtonClick)
         self.ui.Panels_Ok.clicked.connect(self.numbers_of_panel_onButtonClick)
+        self.ui.Calculation.clicked.connect(self.calculation)
 
     # def plot_airfoil(self):
 
@@ -45,14 +51,15 @@ class myMainWindow(QtWidgets.QMainWindow):
         if self.filePath == "" or self.numbers_of_panel == 0:
             self.ui.Message_Label.setText("Input numbers of panel or loading file ")
         else:
-            dx, dy = parametric_airfoil(self.filePath, self.numbers_of_panel)
+            matrix = parametric_airfoil(self.filePath, self.numbers_of_panel)
+            self.geometry = np.array(matrix)
             plt.cla()
             fig = plt.figure(figsize=(5, 2))
             ax = fig.add_axes([0.15, 0.25, 0.7, 0.7])
             ax.set_xlim([-0.1, 1.1])
 
             ax.set_xlabel("x/c")
-            ax.plot(dx, dy, "o--")
+            ax.plot(self.geometry[:,0], self.geometry[:,1], "o--")
 
             cavans = FigureCanvas(fig)
             graphicscene = QtWidgets.QGraphicsScene()
@@ -72,6 +79,13 @@ class myMainWindow(QtWidgets.QMainWindow):
     def numbers_of_panel_onButtonClick(self):
         numbers_of_panel = float(self.ui.Panels_Input.text())
         self.numbers_of_panel = numbers_of_panel
+
+    def calculation(self):
+        if len(self.geometry) == 0 :
+            self.ui.Message_Label.setText("Please input airfoil file ")
+        else:
+            self.CL = BEM(self.velocity ,self.angle_of_attack ,self.geometry )
+            self.ui.CL_Label.setText(str(self.CL))
 
 
 if __name__ == "__main__":
