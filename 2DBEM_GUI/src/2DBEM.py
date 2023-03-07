@@ -74,8 +74,7 @@ class myMainWindow(QtWidgets.QMainWindow):
         if self.filePath == "" or self.numbers_of_panel == 0:
             self.ui.Message_Label.setText("Input numbers of panel or loading file ")
         else:
-            matrix = parametric_airfoil(self.filePath, self.numbers_of_panel)
-            self.geometry = np.array(matrix)
+            self.geometry = np.array(parametric_airfoil(self.filePath, self.numbers_of_panel))
             plt.cla()
             fig = plt.figure(figsize=(5, 2))
             ax = fig.add_axes([0.15, 0.25, 0.7, 0.7])
@@ -100,12 +99,17 @@ class myMainWindow(QtWidgets.QMainWindow):
         self.angle_of_attack = angle_of_attack
 
     def numbers_of_panel_onButtonClick(self):
-        numbers_of_panel = float(self.ui.Panels_Input.text())
-        self.numbers_of_panel = numbers_of_panel
+        #if self.filePath == "" or self.numbers_of_panel == 0:
+        #    self.ui.Message_Label.setText("Input numbers of panel ")
+        #else:
+        self.numbers_of_panel = float(self.ui.Panels_Input.text())
+        if self.filePath != "":
+            self.geometry = np.array(parametric_airfoil(self.filePath, self.numbers_of_panel))
+            
 
     def calculation(self):
         if self.geometry.size == 0 or self.velocity == 0 :
-            self.ui.Message_Label.setText(" Push Plot button before push Calculation button ")
+            self.ui.Message_Label.setText(" Please input file ")
         else:
             self.CL, self.CP = BEM(self.velocity, self.angle_of_attack, self.geometry)
             self.ui.CL_Label.setText(str(round(self.CL, 3)))
