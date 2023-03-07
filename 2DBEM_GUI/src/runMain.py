@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-from ast import Str
 from asyncio.windows_events import NULL
 from PyQt5 import QtWidgets, QtGui, QtCore
 from parameters import parametric_airfoil
@@ -15,9 +13,10 @@ from Subui import Ui_subWindow
 
 class myMainWindow(QtWidgets.QMainWindow):
     def __init__(self):
-        super().__init__()  # in python3, super(Class, self).xxx = super().xxx
+        super(myMainWindow ,self).__init__()  
         self.ui = Ui_mainWindow()
         self.ui.setupUi(self)
+        
         self.velocity = 0
         self.angle_of_attack = 0
         self.numbers_of_panel = 0
@@ -44,13 +43,12 @@ class myMainWindow(QtWidgets.QMainWindow):
         self.ui.CP_Contour_Plot.clicked.connect(self.CP_plot)
         self.ui.Download.clicked.connect(self.download_Cp)
 
-    # def plot_airfoil(self):
+
 
     def file_load(self):
         self.filePath, filterType = QtWidgets.QFileDialog.getOpenFileName(
             self, "Open file", "./"
-        )  # 選擇檔案對話視窗
-        print(self.filePath)
+        )
 
     def airfoil_plot(self):
         if self.filePath == "" or self.numbers_of_panel == 0:
@@ -71,7 +69,7 @@ class myMainWindow(QtWidgets.QMainWindow):
             graphicscene.addWidget(cavans)
             self.ui.graphicsView.setScene(graphicscene)
             self.ui.graphicsView.show()
-            # print( self.ui.graphicsView.size())
+
 
     def velocity_onButtonClick(self):
         velocity = float(self.ui.Velocity_Input.text())
@@ -108,7 +106,6 @@ class myMainWindow(QtWidgets.QMainWindow):
             graphicscene = QtWidgets.QGraphicsScene()
             graphicscene.addWidget(cavans)
             self.subui.graphicsView.setScene(graphicscene)
-            # self.subui.show()
             self.subui.graphicsView.show()
 
     def download_Cp(self):

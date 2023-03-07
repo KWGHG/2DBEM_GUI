@@ -45,16 +45,15 @@ def parametric_airfoil(filename, numbers_of_panel):
     )
     new_lowersurfaceY = lowersurface_interpolate_function(new_lowersurfaceX)
     Temp = np.append(
-        np.linspace(0, 0.1, int(lowersurface_panel * 0.35)),
-        np.linspace(0.1001, 0.899, int(lowersurface_panel * 0.3)),
+        np.linspace(0, 0.1, int(uppersurface_panel * 0.35)),
+        np.linspace(0.1001, 0.899, int(uppersurface_panel * 0.3)),
     )
     new_uppersurfaceX = np.append(
-        Temp, np.linspace(0.9, 1, int(lowersurface_panel * 0.35))
+        Temp, np.linspace(0.9, 1, int(uppersurface_panel * 0.35))
     )
     new_uppersurfaceY = uppersurface_interpolate_function(new_uppersurfaceX)
     new_dataX = np.concatenate([new_lowersurfaceX, new_uppersurfaceX[1:]])
     new_dataY = np.concatenate([new_lowersurfaceY, new_uppersurfaceY[1:]])
     new_data = list(zip(new_dataX, new_dataY))
-    # for line in new_data:
-    #    print(" ".join(map(str, line)))
+
     return new_data

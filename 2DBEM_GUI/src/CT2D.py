@@ -37,8 +37,3 @@ def scaling(X ,sx ,sy):
     A1[0] = A[0,0]
     A1[1] = A[1,0]
     return A1
-
-
-#if __name__ == "__main__":
-#    X = np.zeros(2)
-#    print(translation(X,1,1))

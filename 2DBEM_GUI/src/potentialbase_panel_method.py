@@ -1,4 +1,3 @@
-from ast import main
 import numpy as np
 import math
 import CT2D
@@ -8,19 +7,17 @@ def BEM(inletvelocity, inletangle, geometry):
     velocity = np.zeros(2)
     velocity[0] = inletvelocity * math.cos(inletangle * math.pi / 180)
     velocity[1] = inletvelocity * math.sin(inletangle * math.pi / 180)
-    # 定義尾跡流
+
     Wake = np.zeros(2)
     Wake[0] = geometry[0, 0] + 1000 * math.cos(inletangle * math.pi / 180)
     Wake[1] = geometry[0, 1] + 1000 * math.sin(inletangle * math.pi / 180)
 
-    # 建立矩陣
     collocation = np.zeros([geometry.shape[0] - 1, 2])
     theta = np.zeros(geometry.shape[0] - 1)
     normal_vector = np.zeros([geometry.shape[0] - 1, 2])
     collocation_panel_length = np.zeros(geometry.shape[0] - 2)
     panel_length = np.zeros(geometry.shape[0] - 1)
 
-    # 建立Collocation matrix
     for i in range(geometry.shape[0] - 1):
         collocation[i, 0] = 0.5 * (geometry[i + 1, 0] - geometry[i, 0]) + geometry[i, 0]
         collocation[i, 1] = 0.5 * (geometry[i + 1, 1] - geometry[i, 1]) + geometry[i, 1]
@@ -34,7 +31,6 @@ def BEM(inletvelocity, inletangle, geometry):
         dy = collocation[i + 1, 1] - collocation[i, 1]
         collocation_panel_length[i] = math.sqrt(pow(dx, 2) + pow(dy, 2))
 
-    # 計算誘導函數
     A_Matrix = np.zeros([geometry.shape[0] - 1, geometry.shape[0] - 1])
     B1_Matrix = np.zeros([geometry.shape[0] - 1, geometry.shape[0] - 1])
     B_Matrix = np.zeros([geometry.shape[0] - 1, 1])
@@ -93,7 +89,6 @@ def BEM(inletvelocity, inletangle, geometry):
         Temp = A_Matrix[i, -1]
         A_Matrix[i, -1] = Temp + wake_coefficient
 
-    # 解線性矩陣
     B_Matrix = B1_Matrix.dot(C_Matrix)
 
     Ans = np.linalg.solve(A_Matrix, B_Matrix)
@@ -194,23 +189,3 @@ def strengh_of_source(xi, yi, xj1, yj1, xj2, yj2, index):
         a1 = 0.1591549431 * XPt[0] * math.log(R1)
 
     return a1
-
-
-# if __name__ == "__main__":
-#    row = 0
-#    file = open("naca0012.dat")
-#    lines = file.readlines()
-#    for line in lines:
-#        row += 1
-#    file.close()
-
-#    file = open("naca0012.dat")
-#    data = np.empty((row, 2))
-#    lines = file.readlines()
-#    row = 0
-#    for line in lines:
-#        list1 = line.strip().split()
-#        data[row, :] = list1[:]
-#        row += 1
-#    BEM(1,5,data)
-#    file.close()

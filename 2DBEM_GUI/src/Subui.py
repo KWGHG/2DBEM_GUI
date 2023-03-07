@@ -1,7 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 
-
 class Ui_subWindow(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
