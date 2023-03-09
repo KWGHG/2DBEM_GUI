@@ -12,6 +12,7 @@
     <Name>2DBEM_GUI</Name>
     <RootNamespace>2DBEM_GUI</RootNamespace>
     <SuppressConfigureTestFrameworkPrompt>true</SuppressConfigureTestFrameworkPrompt>
+    <InterpreterId>MSBuild|myvenv2|$(MSBuildProjectFullPath)</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,6 +37,17 @@
   <ItemGroup>
     <Content Include="src\plane.png" />
     <Content Include="src\Ui.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <Interpreter Include="..\..\..\myvenv\myvenv2\">
+      <Id>myvenv2</Id>
+      <Version>3.11</Version>
+      <Description>myvenv2 (Python 3.11 (64-bit))</Description>
+      <InterpreterPath>Scripts\python.exe</InterpreterPath>
+      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
+      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
+      <Architecture>X64</Architecture>
+    </Interpreter>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
