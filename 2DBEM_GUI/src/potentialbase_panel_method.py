@@ -124,7 +124,6 @@ def BEM(inletvelocity, inletangle, geometry):
     CL = -Force[0] * math.sin(inletangle * math.pi / 180) + Force[1] * math.cos(
         inletangle * math.pi / 180
     )
-
     return CL, CP
 
 
