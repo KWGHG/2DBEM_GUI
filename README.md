@@ -1,7 +1,7 @@
 # README 2DBEM GUI
 透過二維邊界元素法（BEM）求解２維翼型的升力係數（CL）與壓力分佈（-CP）
 
-![專案封面圖](https://fakeimg.pl/500/)
+![image]([https://fakeimg.pl/500/](https://github.com/KWGHG/2DBEM_GUI/blob/master/2DBEM_GUI.jpg))
 
 ## 用法
 可參考example資料夾內的範例  
