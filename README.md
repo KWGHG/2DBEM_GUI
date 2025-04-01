@@ -20,7 +20,7 @@
 | 0.9 | 0.05 |
 | 1 | 0 |
 ## 安裝
-此專案由python開發，需要套件如`requirements.txt`所示。  
+此專案由python開發，需要套件如`requirement.txt`所示。  
 套件：  
 + `PyQt5`
 + `matplotlib`
